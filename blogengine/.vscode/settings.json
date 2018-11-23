@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/komp/Desktop/django_pr/pr1/venv/bin/python",
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django"
+   ],
+}

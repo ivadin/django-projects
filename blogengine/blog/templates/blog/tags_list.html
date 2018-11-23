@@ -1,0 +1,82 @@
+{% extends "blog/base_blog.html" %}
+
+{% block title %}
+Tags - {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+    <h1 class="mg_bt5 text-center">Tags:<a href="{% url 'tag_create_url' %}" class="btn btn-success">Create Tag</a></h1>
+
+    {% for tag in tags %}
+        <div class="row" id="{{ tag.slug }}">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <div class="caption">
+                            <h3>{{tag.title  | title}}</h3>
+                            <a href="{{ tag.get_absolute_url }}" class="btn btn-primary">Find</a>
+                            <a href="{{ tag.get_update_url }}" class="btn btn-primary">Update</a>
+                            <button id="delete_btn" name="{{ tag.slug }}" class="btn btn-danger">Delete</button>
+                            {% comment %} <button id="tmp_btn" name="{{ tag.slug }}" class="btn btn-success" onclick="task_script(name)" >TMP</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% comment %} <script type="text/javascript">
+        function task_script(name){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{%url 'tags_list_url' %}", false);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            var d = {"slug": name};
+            xhr.send(d);
+        }
+    </script> {% endcomment %}
+    <script>
+
+        $(document).ready(function () {
+            $(".thumbnail").on('click', function(event){
+                if (event.target.id == "delete_btn"){
+                    elem_slug = event.target.name;
+                    url = "{%url 'tags_list_url' %}";
+                    tag_element = this;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: {
+                            "slug" : elem_slug,
+                        },
+                        error: function(){
+                            alert("nevedomaya hren'");
+                        },
+                        success: function(data) {
+                            $(tag_element).hide();
+                            alert(Data);
+                        },
+
+                    });
+                }
+            })
+            //$("button#delete_btn").click(function(){
+            //    url = "{%url 'tags_list_url' %}";
+            //    mydata = {
+            //        "hello": "hello",
+            //        "some_sring": "some_string",
+            //    };
+            //    elem_slug = this.name;
+            //    $("#"+elem_slug).hide();
+            //    $.ajax({
+            //        type: "GET",
+            //        url: url,
+            //        data: {
+            //            "hello": "hello",
+            //           "some_sring": "some_string",
+            //            "slug" : elem_slug,
+            //        },
+            //        success: function(data) {
+            //            alert(data);
+            //        },
+            //    });
+            //});
+        });
+    </script>
+{% endblock content %}
